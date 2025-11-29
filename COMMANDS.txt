@@ -5,6 +5,136 @@ ASSESSMENT PROJECT - COMMANDS REFERENCE
 This file contains all the commands needed to run the segmentation project.
 
 ================================================================================
+QUICK START - STEP BY STEP DEMONSTRATION (FOR INTERVIEW)
+================================================================================
+
+Follow these steps in order to demonstrate the project:
+
+STEP 1: ACTIVATE VIRTUAL ENVIRONMENT
+--------------------------------------
+Windows PowerShell:
+  .\venv\Scripts\Activate.ps1
+
+Linux/macOS:
+  source venv/bin/activate
+
+Expected: Command prompt should show (venv) prefix
+
+
+STEP 2: TEST ENVIRONMENT SETUP
+---------------------------------
+Command:
+  python src/test_setup.py
+
+What it does: Verifies PyTorch and dependencies are installed correctly
+
+Expected Output:
+  PyTorch version: 2.9.1+cpu
+  CUDA available: False
+  Wrote results/test_image.png
+  Setup looks good.
+
+
+STEP 3: SHOW PROJECT STATUS AND RESULTS
+-----------------------------------------
+Command:
+  python src/show_results.py
+
+What it does: Displays dataset statistics, model checkpoint info, and results
+
+Expected Output:
+  ============================================================
+  ASSESSMENT PROJECT - RESULTS SUMMARY
+  ============================================================
+  📊 Dataset Statistics:
+  ------------------------------------------------------------
+    Train samples: 28
+    Val samples:   6
+    Test samples:  6
+    Total samples: 40
+  🎯 Model Checkpoint:
+  ------------------------------------------------------------
+    Status: ✓ Model checkpoint found
+    Best validation Dice: 0.7068
+    Trained for: 10 epochs
+  📁 Generated Results:
+  ------------------------------------------------------------
+    Prediction images: 6 files in results/preds/
+  ============================================================
+  ✅ All systems operational!
+  ============================================================
+
+
+STEP 4: CHECK MODEL CHECKPOINT EXISTS
+---------------------------------------
+Command:
+  dir models
+
+What it does: Lists model checkpoint files
+
+Expected Output:
+  Mode                 LastWriteTime         Length Name
+  ----                 -------------         ------ ----
+  -a----        29-11-2025     12:59       40330007 best.pth
+
+
+STEP 5: RUN PREDICTION ON SAMPLE IMAGE
+---------------------------------------
+Command:
+  python src/predict.py --checkpoint models/best.pth --image data/raw/images/img_000.png --output results/demo_prediction.png
+
+What it does: Generates segmentation mask for a single image
+
+Expected Output:
+  Prediction saved to: results/demo_prediction.png
+  Visualization saved to: results/demo_prediction_vis.png
+
+
+OPTIONAL STEP 6: PREPARE DATA SPLITS (if needed)
+--------------------------------------------------
+Command:
+  python src/prepare_data.py --images_dir data/raw/images --masks_dir data/raw/masks
+
+What it does: Organizes raw images and masks into train/val/test CSV files
+
+Expected Output:
+  Scanning images in data/raw/images...
+  Scanning masks in data/raw/masks...
+  Found 40 matching pairs
+  Splits created:
+    Train: 28 samples -> data/splits\train.csv
+    Val:   6 samples -> data/splits\val.csv
+    Test:  6 samples -> data/splits\test.csv
+
+
+OPTIONAL STEP 7: CHECK PYTORCH INSTALLATION
+--------------------------------------------
+Command:
+  python -c "import torch; print('PyTorch:', torch.__version__); print('CUDA:', torch.cuda.is_available())"
+
+What it does: Shows PyTorch version and CUDA availability
+
+Expected Output:
+  PyTorch: 2.9.1+cpu
+  CUDA: False
+
+
+================================================================================
+AUTOMATED DEMONSTRATION SCRIPT (ALTERNATIVE)
+================================================================================
+
+Instead of running commands manually, you can use the automated script:
+
+Windows PowerShell:
+  .\demo.ps1
+
+Linux/macOS:
+  chmod +x demo.sh
+  ./demo.sh
+
+This script runs all demonstration steps automatically.
+
+================================================================================
 1. SETUP & ENVIRONMENT
 ================================================================================
 
@@ -170,4 +300,3 @@ assessment_project/
 ================================================================================
 END OF COMMANDS REFERENCE
 ================================================================================
-
