@@ -1,0 +1,7 @@
+image_path,mask_path
+data\raw\images\img_018.png,data\raw\masks\img_018_mask.png
+data\raw\images\img_000.png,data\raw\masks\img_000_mask.png
+data\raw\images\img_007.png,data\raw\masks\img_007_mask.png
+data\raw\images\img_014.png,data\raw\masks\img_014_mask.png
+data\raw\images\img_008.png,data\raw\masks\img_008_mask.png
+data\raw\images\img_018.png,data\raw\masks\img_018_mask.png

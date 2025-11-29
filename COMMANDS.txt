@@ -1,0 +1,173 @@
+================================================================================
+ASSESSMENT PROJECT - COMMANDS REFERENCE
+================================================================================
+
+This file contains all the commands needed to run the segmentation project.
+
+================================================================================
+1. SETUP & ENVIRONMENT
+================================================================================
+
+# Activate virtual environment (Windows)
+venv\Scripts\Activate.ps1
+
+# Activate virtual environment (Linux/macOS)
+source venv/bin/activate
+
+# Test environment setup
+python src/test_setup.py
+
+================================================================================
+2. DATA PREPARATION
+================================================================================
+
+# Prepare data splits from raw images and masks
+# This creates train.csv, val.csv, and test.csv in data/splits/
+python src/prepare_data.py --images_dir data/raw/images --masks_dir data/raw/masks
+
+# Optional: Custom split ratios
+python src/prepare_data.py --images_dir data/raw/images --masks_dir data/raw/masks --train_ratio 0.7 --val_ratio 0.15 --test_ratio 0.15
+
+================================================================================
+3. TRAINING
+================================================================================
+
+# Basic training (default: 10 epochs, batch_size=4, lr=1e-3, img_size=256)
+python src/train.py --data_csv data/splits/train.csv
+
+# Training with custom parameters
+python src/train.py --data_csv data/splits/train.csv --epochs 20 --batch_size 8 --lr 0.001 --img_size 256 --save_dir models
+
+# Quick training test (1-2 epochs)
+python src/train.py --data_csv data/splits/train.csv --epochs 2 --batch_size 2 --lr 1e-3
+
+================================================================================
+4. EVALUATION
+================================================================================
+
+# Evaluate on test set and generate predictions
+python src/evaluate.py --checkpoint models/best.pth --data_csv data/splits/test.csv --out_dir results/preds
+
+# Evaluate with custom image size
+python src/evaluate.py --checkpoint models/best.pth --data_csv data/splits/test.csv --out_dir results/preds --img_size 512
+
+================================================================================
+5. SINGLE IMAGE PREDICTION
+================================================================================
+
+# Predict on a single image
+python src/predict.py --checkpoint models/best.pth --image data/raw/images/img_000.png --output results/prediction.png
+
+# Predict with custom threshold
+python src/predict.py --checkpoint models/best.pth --image data/raw/images/img_000.png --output results/prediction.png --threshold 0.5
+
+# Predict with custom image size
+python src/predict.py --checkpoint models/best.pth --image data/raw/images/img_000.png --output results/prediction.png --img_size 512
+
+================================================================================
+6. VIEW RESULTS
+================================================================================
+
+# Display summary of results and statistics
+python src/show_results.py
+
+================================================================================
+7. COMPLETE WORKFLOW EXAMPLE
+================================================================================
+
+# Step 1: Prepare data (if you have raw images)
+python src/prepare_data.py --images_dir data/raw/images --masks_dir data/raw/masks
+
+# Step 2: Train the model
+python src/train.py --data_csv data/splits/train.csv --epochs 10 --batch_size 4 --lr 1e-3
+
+# Step 3: Evaluate on test set
+python src/evaluate.py --checkpoint models/best.pth --data_csv data/splits/test.csv --out_dir results/preds
+
+# Step 4: View results summary
+python src/show_results.py
+
+# Step 5: Predict on a single image
+python src/predict.py --checkpoint models/best.pth --image data/raw/images/img_000.png --output results/single_pred.png
+
+================================================================================
+8. COMMON PARAMETERS
+================================================================================
+
+Training Parameters:
+  --data_csv      : Path to CSV file with image_path and mask_path columns
+  --epochs        : Number of training epochs (default: 10)
+  --batch_size    : Batch size for training (default: 4)
+  --lr            : Learning rate (default: 1e-3)
+  --img_size      : Input image size (default: 256)
+  --save_dir      : Directory to save model checkpoints (default: models)
+
+Evaluation Parameters:
+  --checkpoint    : Path to model checkpoint file
+  --data_csv      : Path to CSV file with test images
+  --out_dir       : Output directory for predictions (default: results/preds)
+  --img_size      : Input image size (default: 256)
+
+Prediction Parameters:
+  --checkpoint    : Path to model checkpoint file
+  --image         : Path to input image
+  --output        : Path to save output (optional, auto-generated if not provided)
+  --img_size      : Input image size (default: 256)
+  --threshold     : Threshold for binary mask (default: 0.5)
+
+Data Preparation Parameters:
+  --images_dir    : Directory containing images (default: data/raw/images)
+  --masks_dir     : Directory containing masks (default: data/raw/masks)
+  --output_dir    : Output directory for CSV files (default: data/splits)
+  --train_ratio   : Training data ratio (default: 0.7)
+  --val_ratio     : Validation data ratio (default: 0.15)
+  --test_ratio    : Test data ratio (default: 0.15)
+  --seed          : Random seed for splitting (default: 42)
+
+================================================================================
+9. TROUBLESHOOTING
+================================================================================
+
+# If you get "ModuleNotFoundError", activate the virtual environment first
+venv\Scripts\Activate.ps1  # Windows
+source venv/bin/activate   # Linux/macOS
+
+# If training is slow, reduce batch_size or img_size
+python src/train.py --data_csv data/splits/train.csv --batch_size 2 --img_size 128
+
+# If you get CUDA errors, the code will automatically use CPU
+# Check device with: python -c "import torch; print(torch.cuda.is_available())"
+
+# If checkpoint loading fails, ensure you're using the correct path
+# Check available checkpoints: dir models
+
+================================================================================
+10. FILE STRUCTURE
+================================================================================
+
+assessment_project/
+  src/
+    train.py          - Training script
+    evaluate.py       - Evaluation script
+    predict.py        - Single image prediction
+    prepare_data.py   - Data preparation script
+    show_results.py   - Results summary script
+    test_setup.py     - Environment test script
+  data/
+    raw/
+      images/         - Raw input images
+      masks/          - Raw mask images
+    splits/
+      train.csv       - Training data CSV
+      val.csv         - Validation data CSV
+      test.csv        - Test data CSV
+  models/
+    best.pth          - Best model checkpoint
+  results/
+    preds/            - Generated predictions
+    *.png             - Visualization images
+
+================================================================================
+END OF COMMANDS REFERENCE
+================================================================================
+
